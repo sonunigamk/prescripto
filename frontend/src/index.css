@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
+*{
+  font-family: "Outfit", sans-serif;
+}
+
+
 .active hr{
   @apply block  
 }
@@ -11,6 +17,9 @@
 ::-webkit-scrollbar{
     @apply hidden
 }
-body{
-  font-family: "Outfit", sans-serif;
+
+@media (max-width:740px){
+  .active p{
+    @apply text-white bg-primary
+  }
 }
