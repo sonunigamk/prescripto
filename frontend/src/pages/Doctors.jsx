@@ -1,7 +1,7 @@
 import React, { useContext, useDebugValue, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
-import { doctors } from '../assets/assets_frontend/assets'
+import {assets} from '../assets/assets'
 
 const Doctors = () => {
 

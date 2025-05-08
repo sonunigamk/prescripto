@@ -1,5 +1,5 @@
 import React from 'react'
-import { assets } from '../assets/assets_frontend/assets'
+import {assets} from '../assets/assets'
 import { FaLaptopMedical } from "react-icons/fa";
 
 const Footer = () => {
