@@ -1,7 +1,7 @@
 import React, { useContext, useDebugValue, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
-import {assets} from '../assets/assets'
+
 
 const Doctors = () => {
 
@@ -10,7 +10,7 @@ const Doctors = () => {
   const[showFilter,setShowFilter]=useState(false);
   const navigate = useNavigate();
 
-  const { Doctors } = useContext(AppContext)
+  const { doctors } = useContext(AppContext)
 
   const applyFilter = () => {
     if (speciality) {
