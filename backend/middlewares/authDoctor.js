@@ -2,25 +2,28 @@ import jwt from "jsonwebtoken";
 
 const authDoctor = async (req, res, next) => {
   try {
-    const { dtoken } = req.headers;
+    const authHeader = req.headers.authorization || req.headers.dtoken || req.headers.dToken;
 
-    if (!dtoken) {
-      return res.json({
+    if (!authHeader) {
+      return res.status(401).json({
         success: false,
         message: "Not Authorized, Login Again",
       });
     }
 
-    // Verify token
-    const token_decode = jwt.verify(dtoken, process.env.JWT_SECRET);
+    // If using "Bearer <token>" format
+    const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : authHeader;
 
-    // Assign to req.doctorId instead of req.body
-    req.doctorId = token_decode.id;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Assign decoded ID to req.doctorId and req.doctor (optional)
+    req.doctorId = decoded.id;
+    req.doctor = { _id: decoded.id };
 
     next();
   } catch (error) {
     console.log("AuthDoctor Error:", error.message);
-    res.json({ success: false, message: error.message });
+    res.status(401).json({ success: false, message: "Invalid or expired token" });
   }
 };
 
