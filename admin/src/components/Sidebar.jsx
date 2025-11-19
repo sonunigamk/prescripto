@@ -10,7 +10,7 @@ const Sidebar = () => {
 
 
   return (
-    <div className=" min-h-screen border-r">
+    <div className=" min-h-screen border-r bg-white">
       {aToken && (
         <ul className="text-gray-600 mt-5">
           <NavLink

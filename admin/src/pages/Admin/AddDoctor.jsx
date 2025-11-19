@@ -18,58 +18,58 @@ const AddDoctor = () => {
     const [address1, setAddress1] = useState('')
     const [address2, setAddress2] = useState('')
 
-    const{backendUrl,aToken} = useContext(AdminContext)
+    const { backendUrl, aToken } = useContext(AdminContext)
 
- const onSubmitHandler = async (event)=>{
-    event.preventDefault()
+    const onSubmitHandler = async (event) => {
+        event.preventDefault()
 
-    try {
-        if(!docImg){
-            return toast.error('Image Not Selected')
+        try {
+            if (!docImg) {
+                return toast.error('Image Not Selected')
+            }
+
+            const formData = new FormData()
+            formData.append('image', docImg)
+            formData.append('name', name)
+            formData.append('email', email)
+            formData.append('password', password)
+            formData.append('about', about)
+            formData.append('fees', Number(fees))
+            formData.append('experience', experience)
+            formData.append('speciality', speciality)
+            formData.append('degree', degree)
+            formData.append('address', JSON.stringify({ line: address1, line2: address2 }))
+
+            //console log form data
+            formData.forEach((value, key) => {
+                console.log(`${key} : ${value}`)
+            })
+
+            const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
+
+            if (data.success) {
+                toast.success(data.message)
+                setDocImg(false)
+                setName('')
+                setEmail('')
+                setPassword('')
+                setAbout('')
+                setDegree('')
+                setFees('')
+                setAddress1('')
+                setAddress2('')
+
+
+            } else {
+                toast.error(data.message)
+            }
+
+
+        } catch (error) {
+            toast.error(error.message)
+            console.log(error)
         }
-
-        const formData =new FormData()
-        formData.append('image',docImg)
-        formData.append('name',name)
-        formData.append('email',email)
-        formData.append('password',password)
-        formData.append('about',about)
-        formData.append('fees',Number(fees))
-        formData.append('experience',experience)
-        formData.append('speciality',speciality)
-        formData.append('degree',degree)
-        formData.append('address',JSON.stringify({line:address1,line2:address2}))
-        
-        //console log form data
-       formData.forEach((value,key)=>{
-        console.log(`${key} : ${value}`)
-       })
-
-       const {data} = await axios.post(backendUrl+'/api/admin/add-doctor',formData,{headers:{aToken}})
-    
-       if(data.success){
-        toast.success(data.message)
-        setDocImg(false)
-        setName('')
-        setEmail('')
-        setPassword('')
-        setAbout('')
-        setDegree('')
-        setFees('')
-        setAddress1('')
-        setAddress2('')
-
-        
-       }else{
-        toast.error(data.message)
-       }
-
-
-    } catch (error) {
-        toast.error(error.message)
-        console.log(error)
     }
- }
 
     return (
         <form onSubmit={onSubmitHandler} className='m-5 w-full'>
@@ -121,7 +121,7 @@ const AddDoctor = () => {
 
                         <div className='flex flex-col gap-1'>
                             <p>Fees</p>
-                            <input  onChange={(e) => setFees(e.target.value)} value={fees} className='border rounded px-3 py-2' type="number" placeholder='fees' required />
+                            <input onChange={(e) => setFees(e.target.value)} value={fees} className='border rounded px-3 py-2' type="number" placeholder='fees' required />
                         </div>
                     </div>
                     <div className='w-full lg:flex-1 flex flex-col gap-4'>
@@ -133,6 +133,7 @@ const AddDoctor = () => {
                                 <option value="Dermatologist">Dermatologist</option>
                                 <option value="Pediatricians">Pediatricians</option>
                                 <option value="Neurologist">Neurologist</option>
+                                <option value="Gastroenterologist">Gastroenterologist</option>
                             </select>
                         </div>
 

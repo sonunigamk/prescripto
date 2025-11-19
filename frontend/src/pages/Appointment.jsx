@@ -10,6 +10,7 @@ import axios from 'axios'
 const Appointment = () => {
 
   const { docId } = useParams()
+  // CRITICAL: Ensure token is destructured here
   const { doctors, currencySymbol, backendUrl, token, getDoctorsData } = useContext(AppContext)
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
@@ -24,7 +25,6 @@ const Appointment = () => {
   const fetchDoctInfo = async () => {
     const docInfo = doctors.find(doc => doc._id === docId)
     setDocInfo(docInfo)
-    // console.log(docInfo);
   }
 
   const getAvailableSlots = async () => {
@@ -58,7 +58,8 @@ const Appointment = () => {
         const slotDate = day + "_" + month + "_" + year
         const slotTime = formattedTime
 
-        const isSlotAvailable = docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true
+        // Ensure docInfo is not null before accessing slots_booked
+        const isSlotAvailable = docInfo && docInfo.slots_booked && docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true
 
         if (isSlotAvailable) {
           //add slots to array
@@ -67,23 +68,26 @@ const Appointment = () => {
             time: formattedTime
           })
         }
-
-
-
         currentDate.setMinutes(currentDate.getMinutes() + 30)
       }
-
       allSlots.push(timeSlots)
     }
-
     setDocSlots(allSlots)
   }
 
 
   const bookAppointment = async () => {
+    // We can remove the token check here, as the useEffect handles it on load.
+    // However, keeping a quick check is good practice.
     if (!token) {
       toast.warn('Login to book Appointment')
       return navigate('/login')
+    }
+
+    // Ensure a time slot is selected before attempting to book
+    if (!slotTime) {
+      toast.error('Please select a time slot.');
+      return;
     }
 
     try {
@@ -112,23 +116,31 @@ const Appointment = () => {
   }
 
 
+  // --------------------------------------------------------
+  // 🔑 FIX: Authentication Guard
+  // Redirects the user if the token is not present when the page loads.
+  // --------------------------------------------------------
+  useEffect(() => {
+    if (token === false) { // Check for explicitly false or null
+      toast.error("Please log in to view and book appointments.");
+      navigate('/login');
+    }
+  }, [token, navigate]);
+  // --------------------------------------------------------
+
 
   useEffect(() => {
     fetchDoctInfo();
   }, [doctors, docId])
 
- useEffect(() => {
-  if (docInfo) {
-    getAvailableSlots();
-  }
-}, [docInfo]);
-
-
-
   useEffect(() => {
-    console.log(docSlots);
-
-  }, [docSlots])
+    if (docInfo) {
+      getAvailableSlots();
+      // Reset selected slot index and time when docInfo changes
+      setSlotIndex(0);
+      setSlotTime('');
+    }
+  }, [docInfo]);
 
 
   return docInfo && (
@@ -152,7 +164,7 @@ const Appointment = () => {
 
           </div>
 
-          {/* About section of doctor  */}
+          {/* About section of doctor  */}
           <div >
             <p className='flex items-center gap-1 text-sm font-medium text-gray-900 mt-3'>About <img src={assets.info_icon} alt="" /></p>
             <p className='text-sm text-gray-500 max-w-[700px] mt-1'>{docInfo.about}</p>
@@ -161,7 +173,7 @@ const Appointment = () => {
             Appointnment fee: <span className='text-gray-600'> {currencySymbol} {docInfo.fees}</span>
           </p>
         </div>
-        
+
 
       </div>
       {/*----------- Booking Slots -----------*/}
@@ -169,7 +181,7 @@ const Appointment = () => {
         <p>Booking slot</p>
         <div className='flex gap-3 items-center w-full overflow-x-scroll mt-4'>
           {
-            docSlots.length && docSlots.map((item, index) => (<div onClick={() => setSlotIndex(index)}
+            docSlots.length && docSlots.map((item, index) => (<div onClick={() => { setSlotIndex(index); setSlotTime('') }}
               className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-primary text-white' : 'border border-gray-200'}`}
               key={index}>
               <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
@@ -183,12 +195,17 @@ const Appointment = () => {
             <p onClick={() => setSlotTime(item.time)}
               className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-primary text-white ' : 'text-gray-400 border border-gray-300'}`} key={index}>
               {item.time.toLowerCase()}
-
             </p>
           ))}
         </div>
 
-        <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book an appointment</button>
+        <button
+          onClick={bookAppointment}
+          className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 disabled:opacity-50'
+          disabled={!slotTime} // Disable button if no slot is selected
+        >
+          Book an appointment
+        </button>
 
       </div>
 
@@ -199,4 +216,4 @@ const Appointment = () => {
   )
 }
 
-export default Appointment
+export default Appointment;

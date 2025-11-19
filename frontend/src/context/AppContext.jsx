@@ -33,23 +33,31 @@ const[userData, setUserData]=useState(false)
         }
     }
 
-  const loadUserProfileData = async()=>{
+ 
 
+const loadUserProfileData = async () => {
     try {
-
-        const { data } = await axios.get(`${backendUrl}/api/user/get-profile`, { headers: { token } });
-
-        if(data.success){
-            setUserData(data.userData)
-        } else{
-            toast.error(data.message)
-        }
+        const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
         
+        if (data.success) {
+            setUserData(data.userData)
+        } else {
+            toast.error(data.message)
+            setToken(false)
+            localStorage.removeItem('token')
+        }
     } catch (error) {
-        console.log(error) 
-        toast.error(error.message)
+        console.log(error)
+        if (error.response && (error.response.status === 401 || error.response.status === 404)) {
+            setToken(false)
+            localStorage.removeItem('token')
+        } else {
+            toast.error(error.message)
+        }
     }
-  }
+}
+
+
 
     const value = {
         doctors,getDoctorsData,

@@ -20,7 +20,7 @@ const App = () => {
  const{dToken} = useContext(DoctorContext)
 
   return aToken  || dToken ?(
-    <div className='bg-violet-50 '>
+    <div className='bg-violet-50'>
       <ToastContainer/>
       <Navbar/>
       <div className='flex items-start '>
