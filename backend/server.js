@@ -16,16 +16,17 @@ connectCloudinary();
 
 /// ------middlewares-------///
 app.use(express.json());
-app.use(cors())
-// app.use(
-//   cors({
-//     origin: [
-//       "https://appointment-booker-app.vercel.app/",
-//       "https://prescripto-admin-beta-drab.vercel.app/",
-//     ],
-//     credentials: true,
-//   })
-// );
+
+app.use(
+  cors({
+    origin: [
+      "https://appointment-booker-app.vercel.app", 
+      "https://prescripto-admin-beta-drab.vercel.app", 
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.urlencoded({ extended: true }));
 
 ///-------api endpoint------///
@@ -34,8 +35,8 @@ app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 
-app.get("/", (req, res) => {
-  res.send("Api working great");
-});
+// app.get("/", (req, res) => {
+//   res.send("Api working great");
+// });
 
 app.listen(PORT, () => console.log("server is running on port no:", PORT));
