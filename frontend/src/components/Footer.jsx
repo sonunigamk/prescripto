@@ -1,5 +1,5 @@
 import React from 'react'
-import {assets} from '../assets/assets'
+import { assets } from '../assets/assets'
 import { FaLaptopMedical } from "react-icons/fa";
 
 const Footer = () => {
@@ -10,13 +10,13 @@ const Footer = () => {
                 <div className="left-box">
                     <img className='mb-5 w-40' src={assets.logo} alt="logo" />
 
-{/* <div className="log flex gap-1 px-1 justify-center items-center">
+                    {/* <div className="log flex gap-1 px-1 justify-center items-center">
         <FaLaptopMedical  className=' text-blue-600 text-4xl rounded-2xl'/>
         <h1 className='font-bold text-3xl text-blue-950 '>Prescripto</h1>
         </div> */}
 
 
-  <p className='w-full md:w-2/3 text-gray-600 leading-6'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                    <p className='w-full md:w-2/3 text-gray-600 leading-6'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
                 </div>
 
                 {/* middle section */}
@@ -37,6 +37,18 @@ const Footer = () => {
                     <ul className='flex flex-col gap-2 text-gray-600' >
                         <li>+0-000-000-000</li>
                         <li>sonunigam0382002@gmail.com</li>
+
+                        {/* Admin Link Added Here */}
+                        <li className='mt-2'>
+                            <a
+                                href="https://prescripto-admin-beta-drab.vercel.app"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className='border border-slate-400 px-4 py-1.5 rounded-full shadow-2xl text-xs hover:bg-gray-100 transition-all font-semibold '
+                            >
+                                Admin Panel
+                            </a>
+                        </li>
                     </ul>
 
                 </div>

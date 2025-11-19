@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react'
-import { assets } from '../assets/assets'
+import React, { useContext, useState, useEffect } from 'react'
 import { AdminContext } from '../context/AdminContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { DoctorContext } from '../context/DoctorContext'
+import { useNavigate } from 'react-router-dom' // 1. Import useNavigate
 
 const Login = () => {
 
@@ -11,8 +11,20 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const { setAToken, backendUrl } = useContext(AdminContext)
-    const { setDToken } = useContext(DoctorContext)
+    // 2. Get aToken and dToken from contexts to watch for changes
+    const { setAToken, backendUrl, aToken } = useContext(AdminContext)
+    const { setDToken, dToken } = useContext(DoctorContext)
+
+    const navigate = useNavigate() // 3. Initialize navigate
+
+    // 4. Add this useEffect to redirect immediately after login
+    useEffect(() => {
+        if (state === 'Admin' && aToken) {
+            navigate('/admin-dashboard')
+        } else if (state === 'Doctor' && dToken) {
+            navigate('/doctor-dashboard')
+        }
+    }, [aToken, dToken])
 
     const onSubmitHandler = async (event) => {
 
@@ -24,28 +36,27 @@ const Login = () => {
                 const { data } = await axios.post(backendUrl + '/api/admin/login', { email, password })
 
                 if (data.success) {
-                   localStorage.setItem('aToken',data.token)
+                    localStorage.setItem('aToken', data.token)
                     setAToken(data.token)
-                } else{
+                    // No need to navigate here manually; the useEffect above handles it
+                } else {
                     toast.error(data.message)
                 }
 
             } else {
 
-                const{data} = await axios.post(backendUrl+'/api/doctor/login',{email,password})
+                const { data } = await axios.post(backendUrl + '/api/doctor/login', { email, password })
                 if (data.success) {
-                   localStorage.setItem('dToken',data.token)
+                    localStorage.setItem('dToken', data.token)
                     setDToken(data.token)
-                    
-                } else{
+                } else {
                     toast.error(data.message)
                 }
 
             }
 
-
         } catch (error) {
-
+            // Handle error
         }
     }
 
@@ -55,7 +66,7 @@ const Login = () => {
 
             <div className='flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-[#5E5E5E] text-sm shadow-lg'>
 
-                <p className='text-2xl font-semibold m-auto'><span className='text-primary'>{state}</span>Login</p>
+                <p className='text-2xl font-semibold m-auto'><span className='text-primary'>{state}</span> Login</p>
 
                 <div className='w-full'>
                     <p>Email</p>
