@@ -56,12 +56,14 @@ cd prescripto
 ```
 
 ### 2. Backend Setup
+
 ```
-cd backend  
+cd backend
 npm install
 ```
 
 **Create a .env file in the backend directory:**
+
 ```
 PORT=4000
 MONGODB_URI=your_mongodb_connection_string
@@ -73,9 +75,9 @@ ADMIN_EMAIL=admin@prescripto.com
 ADMIN_PASSWORD=admin123
 ```
 
- **Start the backend server:**
+**Start the backend server:**
 
- ```
+```
 npm start
 ```
 
@@ -86,7 +88,7 @@ cd frontend
 npm install
 ```
 
- **Create a .env file in the frontend directory:**
+**Create a .env file in the frontend directory:**
 
 ```
 VITE_BACKEND_URL=http://localhost:4000
@@ -99,16 +101,17 @@ npm run dev
 ```
 
 ### 4. Admin Panel Setup
+
 ```
 cd admin
 npm install
 ```
 
 **Create a .env file in the admin directory:**
+
 ```
 VITE_BACKEND_URL=http://localhost:4000
 ```
-
 
 **Run the admin panel:**
 
@@ -116,29 +119,10 @@ VITE_BACKEND_URL=http://localhost:4000
 npm run dev
 ```
 
-### 📁 Project Structure
-
-prescripto/
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   └── server.js
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── context/
-└── admin/
-    ├── src/
-        ├── components/
-        ├── pages/
-        └── context/
-
 ### 🚀 Deployment Notes (CORS & Vercel)
 
 To avoid "page not found" issues on refresh in Vercel, add a vercel.json file in both frontend and admin folders:
+
 ```
 {
   "rewrites": [
