@@ -16,15 +16,16 @@ connectCloudinary();
 
 /// ------middlewares-------///
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "https://appointment-booker-app.vercel.app/",
-      "https://prescripto-admin-beta-drab.vercel.app/",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors())
+// app.use(
+//   cors({
+//     origin: [
+//       "https://appointment-booker-app.vercel.app/",
+//       "https://prescripto-admin-beta-drab.vercel.app/",
+//     ],
+//     credentials: true,
+//   })
+// );
 app.use(express.urlencoded({ extended: true }));
 
 ///-------api endpoint------///
